@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AstraBlog — a secure modern blog management system.">
+  <title>AstraBlog — Modern Blog System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <canvas id="spaceCanvas" aria-hidden="true"></canvas>
+  <div class="aurora aurora-a"></div>
+  <div class="aurora aurora-b"></div>
+  <div class="grid-floor" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#home" aria-label="AstraBlog home">
+      <span class="brand-mark">A</span>
+      <span>Astra<span>Blog</span></span>
+    </a>
+    <nav>
+      <a href="#home">Explore</a>
+      <a href="#dashboard" id="dashboardLink" class="hidden">Dashboard</a>
+      <button id="loginBtn" class="ghost-btn">Login</button>
+      <button id="logoutBtn" class="ghost-btn hidden">Logout</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="pulse"></span> Secure ideas. Beautifully published.</div>
+        <h1>Thoughts that<br><em>move</em> the future.</h1>
+        <p>A premium blog management experience with a cinematic 3D atmosphere, fast search, secure authentication and full post management.</p>
+        <div class="hero-actions">
+          <a href="#posts" class="primary-btn">Explore stories <span>↗</span></a>
+          <button id="heroLogin" class="secondary-btn">Start writing</button>
+        </div>
+      </div>
+      <div class="hero-orbit" aria-hidden="true">
+        <div class="orbit-ring ring-1"></div>
+        <div class="orbit-ring ring-2"></div>
+        <div class="orbit-core">
+          <span>WRITE</span>
+          <strong>∞</strong>
+          <small>CREATE • SHARE • GROW</small>
+        </div>
+      </div>
+    </section>
+
+    <section id="posts" class="content-section">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">The library</div>
+          <h2>Latest stories</h2>
+        </div>
+        <div class="search-wrap">
+          <span>⌕</span>
+          <input id="searchInput" type="search" placeholder="Search stories..." autocomplete="off">
+        </div>
+      </div>
+      <div id="postsGrid" class="posts-grid"></div>
+      <div id="emptyState" class="empty-state hidden">
+        <div>✦</div>
+        <h3>No stories found</h3>
+        <p>Try another search or create the first story.</p>
+      </div>
+    </section>
+
+    <section id="dashboard" class="content-section dashboard-section hidden">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Creator space</div>
+          <h2>Your dashboard</h2>
+        </div>
+        <button id="newPostBtn" class="primary-btn">+ New post</button>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card"><span>YOUR POSTS</span><strong id="postCount">0</strong></div>
+        <div class="stat-card"><span>ACCOUNT</span><strong id="accountName">—</strong></div>
+        <div class="stat-card"><span>STATUS</span><strong class="online">● Secure</strong></div>
+      </div>
+      <div id="myPosts" class="manage-list"></div>
+    </section>
+  </main>
+
+  <div id="postModal" class="modal hidden">
+    <div class="modal-card reader-card">
+      <button class="close-btn" data-close="postModal">×</button>
+      <div class="eyebrow" id="readerMeta">STORY</div>
+      <h2 id="readerTitle">Post title</h2>
+      <div id="readerContent" class="reader-content"></div>
+    </div>
+  </div>
+
+  <div id="authModal" class="modal hidden">
+    <div class="modal-card auth-card">
+      <button class="close-btn" data-close="authModal">×</button>
+      <div class="auth-switch">
+        <button id="loginTab" class="active">Login</button>
+        <button id="registerTab">Create account</button>
+      </div>
+      <div class="eyebrow">WELCOME BACK</div>
+      <h2 id="authTitle">Enter the story.</h2>
+      <p id="authSubtitle">Sign in to manage your posts.</p>
+      <form id="authForm">
+        <div id="nameField" class="field hidden">
+          <label>Name</label>
+          <input id="nameInput" type="text" maxlength="60" placeholder="Your name">
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input id="emailInput" type="email" maxlength="120" placeholder="you@example.com" required>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input id="passwordInput" type="password" minlength="8" maxlength="72" placeholder="8+ characters" required>
+        </div>
+        <button class="primary-btn wide" type="submit" id="authSubmit">Login →</button>
+        <div id="authMessage" class="form-message"></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="editorModal" class="modal hidden">
+    <div class="modal-card editor-card">
+      <button class="close-btn" data-close="editorModal">×</button>
+      <div class="eyebrow" id="editorEyebrow">NEW STORY</div>
+      <h2 id="editorTitle">Create something worth reading.</h2>
+      <form id="postForm">
+        <input id="postId" type="hidden">
+        <div class="field">
+          <label>Title</label>
+          <input id="postTitle" type="text" maxlength="160" placeholder="A title with a pulse..." required>
+        </div>
+        <div class="field">
+          <label>Content</label>
+          <textarea id="postContent" maxlength="20000" rows="10" placeholder="Start writing..." required></textarea>
+        </div>
+        <div class="editor-actions">
+          <button type="button" class="secondary-btn" data-close="editorModal">Cancel</button>
+          <button type="submit" class="primary-btn">Publish story ↗</button>
+        </div>
+        <div id="postMessage" class="form-message"></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+const mongoose = require("mongoose");
+
+const postSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 3,
+    maxlength: 160
+  },
+  content: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 10,
+    maxlength: 20000
+  },
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
+  }
+}, { timestamps: true });
+
+module.exports = mongoose.model("Post", postSchema);
